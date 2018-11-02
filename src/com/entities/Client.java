@@ -39,8 +39,10 @@ public class Client extends Person implements BankInterace{
 		// TODO Auto-generated method stub
 		
 		String msg = "" ;
-		String queryInsert = "INSERT INTO uniminuto_account(cuenta_numero, cuenta_creacion, cuenta_valor, cuenta_estado, cuenta_sucursal, cuenta_empleado)"
-				+ " VALUES(?,?,?,?,NOW())";
+		String queryInsert = ""
+		+ "INSERT INTO uniminuto_cuenta(cuenta_numero, cuenta_valor, cuenta_estado, "
+		+ "cuenta_sucursal, cuenta_cliente, cuenta_empleado, cuenta_creacion)"
+				+ " VALUES(?,?,?,?,?,?,NOW())";
 		if (connect.connectionDb()) {
 			
 			// System.out.println("Existe conexion");
@@ -48,19 +50,33 @@ public class Client extends Person implements BankInterace{
 			Account account = new Account(numAccount, numClient, nameSucursal);
 			Connection connection = connect.getConnection();
 			try {
-			    Statement statement = connection.createStatement();
+			    //Statement statement = connection.createStatement();
 		        PreparedStatement preparedStatement = connection.prepareStatement(queryInsert);
+		        
+		        preparedStatement.setString(1, account.getNumAccount());
+		        
+		        preparedStatement.setObject(2, 0); // Valor
+		        preparedStatement.setObject(3, 1); // Estado (0, 1)
+		        preparedStatement.setInt(4, 1); // sucursal
+		        preparedStatement.setInt(5, 2); // empleado
+		        preparedStatement.setInt(6, 1); // empleado
+		        //preparedStatement.setObject(7, "NOW()");
+		        preparedStatement.executeUpdate();
+		        
+		        msg =  "Cuenta creada exitosamente.";
 			} catch (Exception e) {
-				// TODO: handle exception
+				System.out.println(e);
+				msg = e.getMessage();
 			}
 		}
-		System.out.println("HOLA createAccount");
+		//System.out.println("HOLA createAccount");
 		return msg;
 	}
 
 	@Override
 	public Boolean deleteAccount(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -71,9 +87,28 @@ public class Client extends Person implements BankInterace{
 	}
 
 	@Override
-	public Boolean addMoney(String numAccount, String money) throws RemoteException {
+	public String addMoney(String numAccount, String money) throws RemoteException {
 		// TODO Auto-generated method stub
-		return null;
+		String msg = "" ;
+		String queryUpdate = "UPDATE uniminuto_cuenta SET cuenta_valor = ? WHERE cuenta_numero = ?";
+		
+	if (connect.connectionDb()) {	
+			Account account = new Account(numAccount, Double.parseDouble(money));
+			Connection connection = connect.getConnection();
+			try {
+				PreparedStatement preparedStatement = connection.prepareStatement(queryUpdate);
+		        
+				preparedStatement.setObject(1, account.getMoney());
+				preparedStatement.setString(2, account.getNumAccount());
+		        preparedStatement.executeUpdate();
+		        
+		        msg =  "Consignacion exitosamente.";
+			} catch (Exception e) {
+				System.out.println(e);
+				msg = e.getMessage();
+			}
+		}
+		return msg;
 	}
 
 	@Override

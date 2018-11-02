@@ -34,16 +34,18 @@ public class Office {
 	}
 
 	public static Office getOffice(String name) {
+		Office office = new Office();
 		ConnectionDB connect = new ConnectionDB();
 		if(connect.connectionDb()) {
-			ResultSet rs = connect.consult("SELECT * FROM alumnos ORDER BY alumnos.id ASC");
+			String querySelect = "SELECT * FROM uniminuto_sucursal us WHERE us.sucursal_nombre = " + name;
+			ResultSet rs = connect.consult(querySelect);
 			if(connect.closeDb()) {
-				/*Office o ;
-				o.setCityOffice(cityOffice);
-				o.setCityOffice(cityOffice);*/
+				// while (rs){}
+				office.setName("1");
+				office.setCityOffice(null);
 			}
 		};
 		
-		return null;
+		return office;
 	}
 }

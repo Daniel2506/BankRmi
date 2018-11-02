@@ -3,6 +3,7 @@
  */
 package com.views;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -17,32 +18,52 @@ import com.interfaces.BankInterace;
  */
 public class ViewClient {
 
+	
+public static String menu (BankInterace stub) throws RemoteException {
+		
+		String menu = "Bienvenido! \n Escoja un número de menú \n 1. Crear Cuenta"
+					+ "\n 2. Consignar \n  0. Salir";
+		String item = JOptionPane.showInputDialog(menu);
+		
+		String data1 = null;
+		String data2 = null;
+		String data3 = null;
+		
+		String response = null;
+		switch (item) {
+		case "1":
+			data1 = JOptionPane.showInputDialog("Ingrese Número:");
+			data2 = JOptionPane.showInputDialog("Ingrese Identificación del Cliente:");
+			data3 = JOptionPane.showInputDialog("Ingrese Nombre de sucursal:");
+			response = stub.createAccount(data1, data2, data3);
+			break;
+		case "2":
+			data1 = JOptionPane.showInputDialog("Ingrese Número:");
+			data2 = JOptionPane.showInputDialog("Ingrese Identificación del Cliente:");
+			response = stub.addMoney(data1, data2);
+			break;
+		case "0":
+			System.exit(0);
+			break;
+		default:
+			JOptionPane.showInternalMessageDialog(null, "Menú no valido");
+			menu(stub);
+			break;
+		}
+		return response;
+	}
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("hola mundo daniel");
-		/*ConnectionDB c = new ConnectionDB();
-		if (c.connectionDb()) {
-			System.out.println("SI");
-			if (c.closeDb()) {
-				System.out.println("close");
-			}
-		}else {
-			System.out.println("NO");
-		}*/
-		
 		String host = (args.length < 1) ? null : args[0];
         
         try {
             Registry registry = LocateRegistry.getRegistry(host);
             BankInterace stub = (BankInterace) registry.lookup("Bank");
-            stub.createAccount("1", "1");
-            //String response = Client.menu(stub);
-            //String response = stub.getAbs(request);
-            //System.out.println("response: " + response);
-            //JOptionPane.showMessageDialog(null, "response: " + response);
+            String response = ViewClient.menu(stub);
+            JOptionPane.showMessageDialog(null, "response: " + response);
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();

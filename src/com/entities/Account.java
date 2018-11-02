@@ -15,6 +15,53 @@ public class Account {
 		this.numAccount = numAccount;
 		this.money = 0.0;
 		this.balance = 0.0;
-		this.officeAcount.getOffice(name);
+		this.officeAcount = Office.getOffice(name);
 	}
+	
+	public Account(String numAccount, double money) {
+		this.numAccount = numAccount;
+		this.money = money;
+	}
+
+	public String getNumAccount() {
+		return numAccount;
+	}
+
+	public void setNumAccount(String numAccount) {
+		this.numAccount = numAccount;
+	}
+
+	public Double getMoney() {
+		return money;
+	}
+
+	public void setMoney(Double money) {
+		this.money = money;
+	}
+
+	public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(Double balance) {
+		this.balance = balance;
+	}
+
+	public Office getOfficeAcount() {
+		return officeAcount;
+	}
+
+	public void setOfficeAcount(Office officeAcount) {
+		this.officeAcount = officeAcount;
+	}
+
+	public Client getClientAcount() {
+		return clientAcount;
+	}
+
+	public void setClientAcount(Client clientAcount) {
+		this.clientAcount = clientAcount;
+	}
+	
+	
 }
