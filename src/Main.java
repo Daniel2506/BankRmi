@@ -22,12 +22,7 @@ public class Main {
             // Bind the remote object's stub in the registry
             Registry registry = LocateRegistry.getRegistry();
             registry.bind("Bank", stub);
-            
-
             System.err.println("Server ready");
-            
-            //stub.createAccount("1", "1", "1");
-            
         } catch (Exception e) {
             System.err.println("Server exception: " + e.toString());
             e.printStackTrace();

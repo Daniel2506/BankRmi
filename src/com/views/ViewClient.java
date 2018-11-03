@@ -22,7 +22,7 @@ public class ViewClient {
 public static String menu (BankInterace stub) throws RemoteException {
 		
 		String menu = "Bienvenido! \n Escoja un número de menú \n 1. Crear Cuenta"
-					+ "\n 2. Consignar \n  0. Salir";
+					+ "\n 2. Consignar \n  3. Retirar \n 0. Salir";
 		String item = JOptionPane.showInputDialog(menu);
 		
 		String data1 = null;
@@ -41,6 +41,11 @@ public static String menu (BankInterace stub) throws RemoteException {
 			data1 = JOptionPane.showInputDialog("Ingrese Número:");
 			data2 = JOptionPane.showInputDialog("Ingrese Identificación del Cliente:");
 			response = stub.addMoney(data1, data2);
+			break;
+		case "3":
+			data1 = JOptionPane.showInputDialog("Ingrese Número Cuenta:");
+			data2 = JOptionPane.showInputDialog("Ingrese Valor a retirar:");
+			response = stub.takeMoney(data1, data2);
 			break;
 		case "0":
 			System.exit(0);

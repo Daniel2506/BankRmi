@@ -12,6 +12,6 @@ public interface BankInterace extends Remote{
 	Boolean deleteAccount(String numAccount) throws RemoteException;
 	Boolean editAccount(String numAccount) throws RemoteException;
 	String addMoney(String numAccount, String money) throws RemoteException;
-	Boolean takeMoney(String numAccount, String money) throws RemoteException;
+	String takeMoney(String numAccount, String money) throws RemoteException;
 	Boolean getBalanceMoney(String numAccount) throws RemoteException;
 }

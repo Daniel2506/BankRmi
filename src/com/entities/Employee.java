@@ -67,7 +67,7 @@ public class Employee extends Person implements BankInterace{
 	 * @see com.interfaces.BankInterace#takeMoney(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public Boolean takeMoney(String numAccount, String money) throws RemoteException {
+	public String takeMoney(String numAccount, String money) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

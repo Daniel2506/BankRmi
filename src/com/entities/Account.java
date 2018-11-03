@@ -11,6 +11,8 @@ public class Account {
 	private Office officeAcount;
 	private Client clientAcount;
 	
+	public Account() {}
+	
 	public Account (String numAccount, String numClient, String name) {
 		this.numAccount = numAccount;
 		this.money = 0.0;

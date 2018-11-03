@@ -6,6 +6,7 @@ package com.entities;
 import java.rmi.RemoteException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 
 import com.connections.ConnectionDB;
@@ -112,9 +113,45 @@ public class Client extends Person implements BankInterace{
 	}
 
 	@Override
-	public Boolean takeMoney(String numAccount, String money) throws RemoteException {
+	public String takeMoney(String numAccount, String money) throws RemoteException {
 		// TODO Auto-generated method stub
-		return null;
+		String msg = "";
+		String querySelect = "SELECT * FROM uniminuto_cuenta WHERE cuenta_numero = " + numAccount;
+		String queryUpdate = "UPDATE uniminuto_cuenta SET cuenta_valor = ? WHERE cuenta_numero = ?";
+		if (connect.connectionDb()) {	
+			Account account = new Account();
+			Double  retiro = 0.0;
+			
+			try {
+				ResultSet rs = connect.consult(querySelect);
+				//System.out.println (rs.getDouble("cuenta_valor"));
+				while(rs.next()) {
+					account.setNumAccount(rs.getString("cuenta_numero"));
+					account.setMoney(rs.getDouble("cuenta_valor"));
+				}
+				
+				
+				retiro = account.getMoney() - Double.parseDouble(money);
+				
+				if(retiro < 0 ) {
+					msg = "Error 1";
+					return msg ;
+				}
+				account.setMoney(retiro);
+				
+				Connection connection = connect.getConnection();
+				PreparedStatement preparedStatement = connection.prepareStatement(queryUpdate);
+				preparedStatement.setObject(1, account.getMoney());
+				preparedStatement.setString(2, account.getNumAccount());
+		        preparedStatement.executeUpdate();
+		        
+		        msg =  "OK 5";
+			} catch (Exception e) {
+				System.out.println(e);
+				msg = e.getMessage();
+			}
+		}
+		return msg;
 	}
 
 	@Override
