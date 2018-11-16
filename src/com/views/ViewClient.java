@@ -22,7 +22,7 @@ public class ViewClient {
 public static String menu (BankInterace stub) throws RemoteException {
 		
 		String menu = "Bienvenido! \n Escoja un número de menú \n 1. Crear Cuenta"
-					+ "\n 2. Consignar \n  3. Retirar \n 0. Salir";
+					+ "\n 2. Consignar \n 3. Retirar \n 4. Borrar Cuenta \n 5. Consultar Saldo \n0. Salir";
 		String item = JOptionPane.showInputDialog(menu);
 		
 		String data1 = null;
@@ -47,7 +47,19 @@ public static String menu (BankInterace stub) throws RemoteException {
 			data2 = JOptionPane.showInputDialog("Ingrese Valor a retirar:");
 			response = stub.takeMoney(data1, data2);
 			break;
+		
+		case "4":
+			data1 = JOptionPane.showInputDialog("Ingrese Número Cuenta:");
+			response = stub.deleteAccount(data1);
+			break;
+		
+		case "5":
+			data1 = JOptionPane.showInputDialog("Ingrese Número Cuenta:");
+			response = stub.getBalanceMoney(data1).split(",")[1];
+			break;
+			
 		case "0":
+			response = "0";
 			System.exit(0);
 			break;
 		default:
@@ -67,8 +79,14 @@ public static String menu (BankInterace stub) throws RemoteException {
         try {
             Registry registry = LocateRegistry.getRegistry(host);
             BankInterace stub = (BankInterace) registry.lookup("Bank");
-            String response = ViewClient.menu(stub);
-            JOptionPane.showMessageDialog(null, "response: " + response);
+            
+            String response = "10";
+            while (!response.equals("0")) {
+            	response = ViewClient.menu(stub);
+            	JOptionPane.showMessageDialog(null,response);
+            }
+            
+             
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();

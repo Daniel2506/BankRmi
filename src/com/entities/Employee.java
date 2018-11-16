@@ -40,7 +40,7 @@ public class Employee extends Person implements BankInterace{
 	 * @see com.interfaces.BankInterace#deleteAccount(java.lang.String)
 	 */
 	@Override
-	public Boolean deleteAccount(String numAccount) throws RemoteException {
+	public String deleteAccount(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -49,7 +49,7 @@ public class Employee extends Person implements BankInterace{
 	 * @see com.interfaces.BankInterace#editAccount(java.lang.String)
 	 */
 	@Override
-	public Boolean editAccount(String numAccount) throws RemoteException {
+	public String editAccount(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -76,7 +76,7 @@ public class Employee extends Person implements BankInterace{
 	 * @see com.interfaces.BankInterace#getBalanceMoney(java.lang.String)
 	 */
 	@Override
-	public Boolean getBalanceMoney(String numAccount) throws RemoteException {
+	public String getBalanceMoney(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

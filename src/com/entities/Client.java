@@ -38,7 +38,6 @@ public class Client extends Person implements BankInterace{
 	@Override
 	public String createAccount(String numAccount, String numClient, String nameSucursal) throws RemoteException {
 		// TODO Auto-generated method stub
-		
 		String msg = "" ;
 		String queryInsert = ""
 		+ "INSERT INTO uniminuto_cuenta(cuenta_numero, cuenta_valor, cuenta_estado, "
@@ -75,14 +74,31 @@ public class Client extends Person implements BankInterace{
 	}
 
 	@Override
-	public Boolean deleteAccount(String numAccount) throws RemoteException {
+	public String deleteAccount(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
+		String msg = "";
+		String queryDelete = "DELETE FROM uniminuto_cuenta WHERE cuenta_numero = ?" ;
 		
-		return null;
+		if (connect.connectionDb()) {	
+			Account account = new Account(numAccount);
+			Connection connection = connect.getConnection();
+			try {
+				PreparedStatement preparedStatement = connection.prepareStatement(queryDelete);
+		        preparedStatement.setString(1, account.getNumAccount());
+				preparedStatement.executeUpdate();
+		        
+		        msg =  "5";
+			} catch (Exception e) {
+				System.out.println(e);
+				msg = e.getMessage();
+			}
+		}
+		
+		return msg;
 	}
 
 	@Override
-	public Boolean editAccount(String numAccount) throws RemoteException {
+	public String editAccount(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -90,20 +106,35 @@ public class Client extends Person implements BankInterace{
 	@Override
 	public String addMoney(String numAccount, String money) throws RemoteException {
 		// TODO Auto-generated method stub
+		
 		String msg = "" ;
 		String queryUpdate = "UPDATE uniminuto_cuenta SET cuenta_valor = ? WHERE cuenta_numero = ?";
+		String querySelect = "SELECT * FROM uniminuto_cuenta WHERE cuenta_numero = " + numAccount;
+		
+		if(Double.parseDouble(money) <= 0) {
+			msg = "1";
+			return msg;
+		}
 		
 	if (connect.connectionDb()) {	
 			Account account = new Account(numAccount, Double.parseDouble(money));
 			Connection connection = connect.getConnection();
 			try {
+				
+				ResultSet rs = connect.consult(querySelect);
+				//System.out.println (rs.getDouble("cuenta_valor"));
+				while(rs.next()) {
+					account.setNumAccount(rs.getString("cuenta_numero"));
+					account.setMoney(rs.getDouble("cuenta_valor") + account.getMoney());
+				}
+				
 				PreparedStatement preparedStatement = connection.prepareStatement(queryUpdate);
 		        
 				preparedStatement.setObject(1, account.getMoney());
 				preparedStatement.setString(2, account.getNumAccount());
 		        preparedStatement.executeUpdate();
 		        
-		        msg =  "Consignacion exitosamente.";
+		        msg =  "5";
 			} catch (Exception e) {
 				System.out.println(e);
 				msg = e.getMessage();
@@ -130,7 +161,6 @@ public class Client extends Person implements BankInterace{
 					account.setMoney(rs.getDouble("cuenta_valor"));
 				}
 				
-				
 				retiro = account.getMoney() - Double.parseDouble(money);
 				
 				if(retiro < 0 ) {
@@ -155,9 +185,26 @@ public class Client extends Person implements BankInterace{
 	}
 
 	@Override
-	public Boolean getBalanceMoney(String numAccount) throws RemoteException {
+	public String getBalanceMoney(String numAccount) throws RemoteException {
 		// TODO Auto-generated method stub
-		return null;
+		String msg = "";
+		String querySelect = "SELECT * FROM uniminuto_cuenta WHERE cuenta_numero = " + numAccount;
+		if (connect.connectionDb()) {	
+			Account account = new Account();	
+			try {
+				ResultSet rs = connect.consult(querySelect);
+				//System.out.println (rs.getDouble("cuenta_valor"));
+				while(rs.next()) {
+					account.setNumAccount(rs.getString("cuenta_numero"));
+					account.setMoney(rs.getDouble("cuenta_valor"));
+				}
+		        msg =  "5," + account.getMoney() + " Saldo";
+			} catch (Exception e) {
+				System.out.println(e);
+				msg = e.getMessage();
+			}
+		}
+		return msg;
 	}
 
 }

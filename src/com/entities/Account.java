@@ -13,6 +13,10 @@ public class Account {
 	
 	public Account() {}
 	
+	public Account(String numAccount) {
+		this.numAccount = numAccount;
+	}
+	
 	public Account (String numAccount, String numClient, String name) {
 		this.numAccount = numAccount;
 		this.money = 0.0;
